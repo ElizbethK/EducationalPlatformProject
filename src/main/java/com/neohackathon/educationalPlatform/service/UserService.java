@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Service
@@ -34,8 +35,12 @@ public class UserService {
                    return new ResponseEntity<>(
                            "Invalid password for the user " + userDtoJson.getEmail() ,
                            HttpStatus.UNAUTHORIZED);
-               } else return ResponseEntity.ok("Successfully authorizing! " + '\n' +
-                       "Hello, " + user.getLastName() + user.getFirstName() + "!");
+               } else if((compareEmailAndPassword(user, userDtoJson))){
+                   return ResponseEntity.ok("Successfully authorizing! " + '\n' +
+                       "Hello, " + user.getLastName() +" " + user.getFirstName() + "!");
+               } else return new ResponseEntity<>(
+                       "Sorry, the error on the server side. We'll fix it soon " ,
+                       HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -58,8 +63,22 @@ public class UserService {
            user.setRole(userRegistrationDto.getRole());
            userRepository.save(user);
            return ResponseEntity.ok("Registration completed successfully!" + '\n' +
-                   "Welcome, " + user.getLastName() + user.getFirstName() + "!");
+                   "Welcome, " + user.getLastName() + " " + user.getFirstName() + "!");
 
+        }
+
+        public ResponseEntity<String> recoverPassword(@RequestBody String email){
+            User user = findUserByEmail(email);
+            if (user == null) {
+                return new ResponseEntity<>(
+                        " The user " + email + " does not exist",
+                        HttpStatus.UNAUTHORIZED);
+            } else if (!(user == null))  {
+                return ResponseEntity.ok("The password for " + email +
+                        ": "+ user.getPassword());
+            } else return new ResponseEntity<>(
+                    "Sorry, the error on the server side. We'll fix it soon " ,
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
 }

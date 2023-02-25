@@ -35,8 +35,8 @@ public class LoginController {
         return userService.createStudent(userRegistrationDto);
     }
 
-    @PostMapping("/recover")
-    public ResponseEntity<String> recoverPassword(@RequestBody String email){
+    @PostMapping("/forget")
+    public ResponseEntity<String> getPassword(@RequestBody String email){
         User user = userService.findUserByEmail(email);
         if (user == null) {
             return new ResponseEntity<>(
