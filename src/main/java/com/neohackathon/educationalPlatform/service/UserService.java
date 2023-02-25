@@ -27,14 +27,15 @@ public class UserService {
             User user = findUserByEmail(userDtoJson.getEmail());
             if(user == null) {
               return new ResponseEntity<>(
-                        "Пользователь не существует",
+                        "The user " + userDtoJson.getEmail() + " does not exist",
                         HttpStatus.UNAUTHORIZED);
             } else
                if(!(compareEmailAndPassword(user, userDtoJson))){
                    return new ResponseEntity<>(
-                           "Неверный пароль",
+                           "Invalid password for the user " + userDtoJson.getEmail() ,
                            HttpStatus.UNAUTHORIZED);
-               } else return ResponseEntity.ok("ОК! Переход в личный кабинет пользователя платформы");
+               } else return ResponseEntity.ok("Successfully authorizing! " + '\n' +
+                       "Hello, " + user.getLastName() + user.getFirstName() + "!");
     }
 
 
@@ -56,7 +57,8 @@ public class UserService {
            user.setPassword(userRegistrationDto.getPassword());
            user.setRole(userRegistrationDto.getRole());
            userRepository.save(user);
-           return ResponseEntity.ok("Регистрация прошла успешно");
+           return ResponseEntity.ok("Registration completed successfully!" + '\n' +
+                   "Welcome, " + user.getLastName() + user.getFirstName() + "!");
 
         }
 

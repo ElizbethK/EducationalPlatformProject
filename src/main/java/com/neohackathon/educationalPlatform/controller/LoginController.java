@@ -40,10 +40,10 @@ public class LoginController {
         User user = userService.findUserByEmail(email);
         if (user == null) {
             return new ResponseEntity<>(
-                    "Пользователь не существует",
+                   " The user " + email + " does not exist",
                     HttpStatus.UNAUTHORIZED);
         } else {
-            return ResponseEntity.ok("Пароль для пользователя " + email +
+            return ResponseEntity.ok("The password for " + email +
                     ": "+ user.getPassword());
         }
 
