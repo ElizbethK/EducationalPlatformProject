@@ -30,12 +30,6 @@ public class LoginController {
         return userService.checkUser(userDtoJson);
     }
 
-
-    @GetMapping("/get")
-    public User getUser(){
-        return userService.findUserByEmail("1");
-    }
-
     @PostMapping("/create")
     public ResponseEntity<String> create(@RequestBody UserRegistrationDto userRegistrationDto){
         return userService.createStudent(userRegistrationDto);
