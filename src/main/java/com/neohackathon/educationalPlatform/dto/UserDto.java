@@ -1,4 +1,4 @@
-package com.neohackathon.dto;
+package com.neohackathon.educationalPlatform.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

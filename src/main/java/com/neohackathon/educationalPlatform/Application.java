@@ -1,4 +1,4 @@
-package com.neohackathon;
+package com.neohackathon.educationalPlatform;
 
 
 import org.springframework.boot.SpringApplication;

@@ -1,18 +1,19 @@
-package com.neohackathon.entity;
+package com.neohackathon.educationalPlatform.entity;
 
 
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "user_table")
 @SequenceGenerator(name = "user_id", sequenceName = "user_id_seq", allocationSize = 1)
+@ToString
 public class User {
 
     @Id

@@ -1,4 +1,4 @@
-package com.neohackathon.entity;
+package com.neohackathon.educationalPlatform.entity;
 
 import lombok.RequiredArgsConstructor;
 
