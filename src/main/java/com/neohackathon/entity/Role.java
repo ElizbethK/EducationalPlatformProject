@@ -1,29 +1,17 @@
 package com.neohackathon.entity;
 
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
+public enum Role {
 
-import lombok.Getter;
-import lombok.Setter;
+    ADMIN("ADMIN"),
+    USER("USER");
 
-import javax.persistence.*;
+    private final String value;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "role")
-public class Role {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
-
-    public Role() {
-
+    public String getValue() {
+        return value;
     }
 
-    public Role(String name) {
-        super();
-        this.name = name;
-    }
 }

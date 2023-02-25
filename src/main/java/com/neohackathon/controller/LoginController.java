@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class LoginController {
 
     private UserService userService;
@@ -20,8 +20,7 @@ public class LoginController {
         this.userService = studentService;
     }
 
-
-    @PostMapping()
+    @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody UserDto userDtoJson){
         User student = userService.findStudentByEmail(userDtoJson);
         if (student == null) {
@@ -31,10 +30,21 @@ public class LoginController {
         }
     }
 
-
     @PostMapping("/create")
     public void create(@RequestBody UserDto userDtoJson){
         userService.createStudent(userDtoJson);
     }
+
+    @GetMapping("/recover")
+    public String recoverPassword(@RequestBody UserDto userDtoJson){
+        User student = userService.findStudentByEmail(userDtoJson);
+        if (student == null) {
+           return "User with email: " + userDtoJson.getEmail() + " not found";
+        } else {
+            return student.getPassword();
+        }
+    }
+
+
 
 }

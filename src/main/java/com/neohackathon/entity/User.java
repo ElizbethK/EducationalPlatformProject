@@ -11,13 +11,13 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "student")
-@SequenceGenerator(name = "student_id", sequenceName = "student_id_seq", allocationSize = 1)
+@Table(name = "user_table")
+@SequenceGenerator(name = "user_id", sequenceName = "user_id_seq", allocationSize = 1)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "student_id")
+    @Column(name = "user_id")
     private Long id;
 
     @Column(name = "first_name")
@@ -32,28 +32,22 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id",
-                    referencedColumnName = "user_id"),
-            inverseJoinColumns = @JoinColumn
-                    (name = "role_id",
-                            referencedColumnName = "role_id"))
-    private Collection<Role> roles;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
     public User() {
     }
 
     public User(String firstName, String lastName,
                 String email, String password,
-                Collection<Role> roles) {
+                Role role) {
 
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
 }
