@@ -3,6 +3,7 @@ package com.neohackathon.educationalPlatform.service;
 
 import com.neohackathon.educationalPlatform.dto.UserDto;
 import com.neohackathon.educationalPlatform.dto.UserRegistrationDto;
+import com.neohackathon.educationalPlatform.entity.Role;
 import com.neohackathon.educationalPlatform.entity.User;
 import com.neohackathon.educationalPlatform.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,11 +57,15 @@ public class UserService {
 
         public ResponseEntity<String> createStudent(UserRegistrationDto userRegistrationDto){
            User user = new User();
+           String adminEmail = "admin";
+           String adminPassword = "admin";
            user.setFirstName(userRegistrationDto.getFirstName());
            user.setLastName(userRegistrationDto.getLastName());
            user.setEmail(userRegistrationDto.getEmail());
            user.setPassword(userRegistrationDto.getPassword());
-           user.setRole(userRegistrationDto.getRole());
+           if(userRegistrationDto.getEmail().equals(adminEmail) & userRegistrationDto.getPassword().equals(adminPassword)){
+               user.setRole(Role.ADMIN);
+           } else user.setRole(Role.USER);
            userRepository.save(user);
            return ResponseEntity.ok("Registration completed successfully!" + '\n' +
                    "Welcome, " + user.getLastName() + " " + user.getFirstName() + "!");

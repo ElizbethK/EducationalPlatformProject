@@ -1,8 +1,0 @@
-com\neohackathon\model\Role.class
-com\neohackathon\model\User.class
-com\neohackathon\repository\UserRepository.class
-com\neohackathon\dto\UserDto.class
-com\neohackathon\service\UserService.class
-com\neohackathon\Application.class
-com\neohackathon\dto\UserRegistrationDto.class
-com\neohackathon\controller\Controller.class
