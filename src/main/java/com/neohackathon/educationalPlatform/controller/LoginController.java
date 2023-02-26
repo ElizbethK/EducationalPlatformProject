@@ -25,6 +25,12 @@ public class LoginController {
         this.userService = studentService;
     }
 
+
+    @GetMapping
+    public String test(){
+        return "hello";
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody UserDto userDtoJson) throws ResourceNotFoundException {
         return userService.checkUser(userDtoJson);
