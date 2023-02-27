@@ -1,0 +1,9 @@
+CREATE SEQUENCE user_id_seq;
+create table if not exists  user_table (
+    user_id int8 NOT NULL DEFAULT nextval('user_id_seq') PRIMARY KEY,
+    first_name varchar (50),
+    last_name varchar (50),
+    email varchar (50),
+    password varchar (50),
+    role varchar(50)
+);

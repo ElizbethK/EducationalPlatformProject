@@ -1,11 +1,14 @@
 package com.neohackathon.educationalPlatform.service;
 
 
+import com.neohackathon.educationalPlatform.controller.LoginController;
 import com.neohackathon.educationalPlatform.dto.UserDto;
 import com.neohackathon.educationalPlatform.dto.UserRegistrationDto;
 import com.neohackathon.educationalPlatform.entity.Role;
 import com.neohackathon.educationalPlatform.entity.User;
 import com.neohackathon.educationalPlatform.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class UserService {
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Autowired
     private UserRepository userRepository;
 
@@ -53,30 +57,60 @@ public class UserService {
         }
 
 
+        public ResponseEntity<String> createUser(UserRegistrationDto userRegistrationDto){
+            logger.info("Was sent {} ", userRegistrationDto);
+        //   User user = findUserByEmail(userRegistrationDto.getEmail());
+         //   logger.info("Was found {}", user);
+
+            if(findUserByEmail(userRegistrationDto.getEmail()) == null){
+                addUserToBase(userRegistrationDto);
+                return ResponseEntity.ok("Registration completed successfully! " +
+                       userRegistrationDto.getLastName() + " " + userRegistrationDto.getFirstName() + ", Welcome!");
+            } else
+                return new ResponseEntity<>( " The user " + userRegistrationDto.getEmail() +
+                        " already exists. Please, go the login form.", HttpStatus.CONFLICT);
 
 
-        public ResponseEntity<String> createStudent(UserRegistrationDto userRegistrationDto){
-           User user = new User();
-           String adminEmail = "admin";
-           String adminPassword = "admin";
-           user.setFirstName(userRegistrationDto.getFirstName());
-           user.setLastName(userRegistrationDto.getLastName());
-           user.setEmail(userRegistrationDto.getEmail());
-           user.setPassword(userRegistrationDto.getPassword());
-           if(userRegistrationDto.getEmail().equals(adminEmail) & userRegistrationDto.getPassword().equals(adminPassword)){
-               user.setRole(Role.ADMIN);
-           } else user.setRole(Role.USER);
-           userRepository.save(user);
-           return ResponseEntity.ok("Registration completed successfully!" + '\n' +
-                   "Welcome, " + user.getLastName() + " " + user.getFirstName() + "!");
+                /*return new ResponseEntity<>("No " +
+                    user.getLastName() + " " + user.getFirstName(), HttpStatus.CONFLICT);*/
 
+
+            /*if(!(user == null)) {
+                return new ResponseEntity<>(" The user " + userRegistrationDto.getEmail() +
+                        " already exists. Please, go the login form.",
+                        HttpStatus.CONFLICT);
+            } else {
+                 addUserToBase(userRegistrationDto);
+                return new ResponseEntity<>("Registration completed successfully!" + '\n' +
+                        "Welcome, " + user.getLastName() + " " + user.getFirstName() + "!", HttpStatus.INTERNAL_SERVER_ERROR);
+            }*/
         }
+
+
+        public User addUserToBase(UserRegistrationDto userRegistrationDto){
+            return userRepository.save(new User(
+                        (userRegistrationDto.getFirstName()),
+                        (userRegistrationDto.getLastName()),
+                        (userRegistrationDto.getEmail()),
+                        (userRegistrationDto.getPassword()),
+                      determineRole(userRegistrationDto)));
+        }
+
+
+    public Role determineRole(UserRegistrationDto userRegistrationDto){
+        String adminEmail = "admin";
+        String adminPassword = "admin";
+
+        if (userRegistrationDto.getEmail().equals(adminEmail) & userRegistrationDto.getPassword().equals(adminPassword)) {
+            return Role.ADMIN;
+        } else return Role.USER;
+
+    }
 
         public ResponseEntity<String> recoverPassword(@RequestBody String email){
             User user = findUserByEmail(email);
             if (user == null) {
-                return new ResponseEntity<>(
-                        " The user " + email + " does not exist",
+                return new ResponseEntity<>(" The user " + email + " does not exist",
                         HttpStatus.UNAUTHORIZED);
             } else if (!(user == null))  {
                 return ResponseEntity.ok("The password for " + email +

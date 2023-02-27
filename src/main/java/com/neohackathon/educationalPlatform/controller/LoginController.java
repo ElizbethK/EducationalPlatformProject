@@ -1,5 +1,6 @@
 package com.neohackathon.educationalPlatform.controller;
 
+import com.neohackathon.educationalPlatform.dto.EmailDto;
 import com.neohackathon.educationalPlatform.dto.UserDto;
 import com.neohackathon.educationalPlatform.dto.UserRegistrationDto;
 import com.neohackathon.educationalPlatform.entity.User;
@@ -32,24 +33,24 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto userDtoJson) throws ResourceNotFoundException {
+    public ResponseEntity<String> login(@RequestBody UserDto userDtoJson){
         return userService.checkUser(userDtoJson);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@RequestBody UserRegistrationDto userRegistrationDto){
-        return userService.createStudent(userRegistrationDto);
+    public ResponseEntity<String> create(@RequestBody UserRegistrationDto userRegistrationDtoJson){
+        return userService.createUser(userRegistrationDtoJson);
     }
 
     @PostMapping("/forget")
-    public ResponseEntity<String> getPassword(@RequestBody String email){
-        User user = userService.findUserByEmail(email);
+    public ResponseEntity<String> getPassword(@RequestBody EmailDto emailDtoJson){
+        User user = userService.findUserByEmail(emailDtoJson.getEmail());
         if (user == null) {
             return new ResponseEntity<>(
-                   " The user " + email + " does not exist",
+                   " The user " + emailDtoJson.getEmail() + " does not exist",
                     HttpStatus.UNAUTHORIZED);
         } else {
-            return ResponseEntity.ok("The password for " + email +
+            return ResponseEntity.ok("The password for " + emailDtoJson.getEmail() +
                     ": "+ user.getPassword());
         }
 
